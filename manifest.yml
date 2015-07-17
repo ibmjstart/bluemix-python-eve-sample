@@ -1,6 +1,6 @@
 ---
 declared-services:
-- evemongo:
+  evemongo:
     label: mongolab
     plan: sandbox
   everedis:
