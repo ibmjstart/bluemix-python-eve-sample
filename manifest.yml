@@ -1,11 +1,11 @@
 ---
 declared-services:
 - evemongo:
-    type: mongolab
+    label: mongolab
     plan: sandbox
   everedis:
-    type: rediscloud
-    plan: 25mb
+    label: rediscloud
+    plan: 30mb
 
 applications:
 - name: macreduce
