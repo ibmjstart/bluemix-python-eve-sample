@@ -6,6 +6,7 @@ This project is a [Python-Eve Framework](http://python-eve.org/) application (Fl
 1.0
 
 ### Deployment
+- [Live Demo](http://macreduce.mybluemix.net/api/v1/mac)
 - Cloud [~10 mins == A publicly visible deploy in the cloud.  Sweet!]
 
   [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/ibmjstart/bluemix-python-eve-sample.git)
@@ -16,12 +17,21 @@ This project is a [Python-Eve Framework](http://python-eve.org/) application (Fl
   3. Run Application
   
      `$ python macreduce/run.py`
-  4. Browse to http://localhost:5005/api/v1
-  5. Invoke the custom endpoint to populate your local application with MAC Address Data hosted on the IEEE organizations site.  This will take a couple of minutes to process.
+
+- Data Population
+  1. To verify basic server access, browse to ...
+     * http://localhost:5005/api/v1
+     * http://{enter_your_bluemixhost}.mybluemix.net/api/v1
+  2. Invoke the appropriate custom endpoint to populate your deployed application with MAC Address Data hosted from the IEEE organizations site. This endpoint is protected via basic authentication.  This will take a few minutes to process.
   
      `$ curl -u bluemix:devfun http://localhost:5005/populate`
-  6. Awesome.  You now have a REST API server that can be used to cross-correlate the 3 leading pairs of a MAC Address with its owning Organization.  Have fun.
-  7. Fun Enhancement:  Try to extend the model schema to also include the address information for an organization.  Hint: You'll need to tweak the helper module which parses (and ignores the address info from) the IEEE raw data.
+
+     `$ curl -u bluemix:devfun http://{enter_your_bluemixhost}.mybluemix.net/populate`
+     
+  3. Awesome.  You now have a REST API server that can be used to cross-correlate the 3 leading pairs of a MAC Address with its owning Organization.  Have fun.  Here's an example of the type of query that you can try ...
+
+```$ curl http://{your_host}.mybluemix.net/api/v1/mac?where={"organization":{"$regex":"^ibm.*?$", "$options":"i"}}```
+  4. Fun Enhancement:  Try to extend the model schema to also include the address information for an organization.  Hint: You'll need to tweak the helper module which parses (and ignores the address info from) the IEEE raw data.
 
 ### Assumptions/Limitations/Constraints
 - Using Python 2.7.9 as declared in the runtime.txt file
