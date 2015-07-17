@@ -30,7 +30,7 @@ This project is a [Python-Eve Framework](http://python-eve.org/) application (Fl
      
   3. Awesome.  You now have a REST API server that can be used to cross-correlate the 3 leading pairs of a MAC Address with its owning Organization.  Have fun.  Here's an example of the type of query that you can try ...
 
-```$ curl http://{your_host}.mybluemix.net/api/v1/mac?where={"organization":{"$regex":"^ibm.*?$", "$options":"i"}}```
+    ```$ curl -g -X GET -H "Accept: application/json; charset=utf-8" -H "Cache-Control: no-cache" 'http://{your_host}.mybluemix.net/api/v1/mac?where={"organization":{"$regex":"^ibm.*?$","$options":"i"}}'```
   4. Fun Enhancement:  Try to extend the model schema to also include the address information for an organization.  Hint: You'll need to tweak the helper module which parses (and ignores the address info from) the IEEE raw data.
 
 ### Assumptions/Limitations/Constraints
