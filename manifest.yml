@@ -1,8 +1,8 @@
 ---
 declared-services:
   evemongo:
-    label: mongolab
-    plan: sandbox
+    label: mongodb
+    plan: 100
   everedis:
     label: rediscloud
     plan: 30mb
