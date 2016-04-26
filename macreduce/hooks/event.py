@@ -24,10 +24,7 @@ def before_returning_irrational_items(request, lookup):
     try:
         desiredLang = request.accept_languages.best_match(LANGUAGES.keys())
         print "The Accept-Language Header is: " + desiredLang
-        if desiredLang is not None:
-            lookup["locale"] = {"$eq": desiredLang}
-        else:
-            lookup["locale"] = {"$eq": "en"}
+        lookup["locale"] = {"$eq": desiredLang or "en"}
     except Exception, e:
         print e
         traceback.print_exc()
