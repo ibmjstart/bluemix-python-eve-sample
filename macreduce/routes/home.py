@@ -88,9 +88,9 @@ def run_once_per_day(f):
 
             # Phase 2:  Test whether the current date is past our 24 hour
             #           refresh date criteria or not.
-            print "Evaluating if Now is >= Criteria ..."
+            print("Evaluating if Now is >= Criteria ...")
             if now >= nextDate:
-                print "Refresh criteria has been met"
+                print("Refresh criteria has been met")
                 # Set a flag so that future local repopulates fall through
                 wrapper.has_run = True
                 # Test if we are running in Bluemix
@@ -101,19 +101,19 @@ def run_once_per_day(f):
                 return f(*args, **kwargs)
             else:
                 # Refresh not required, relay a default response
-                print "Refresh criteria NOT met"
+                print("Refresh criteria NOT met")
                 data = {
                     'message': 'Whoaa! MacReduce Data is up to date!'
                 }
                 message = json.dumps(data)
-                print message
+                print(message)
                 resp = Response(message,
                                 status=200,
                                 mimetype='application/json')
                 return resp
-        except Exception, e:
-            print e
-            print traceback.format_exc()
+        except Exception as e:
+            print(e)
+            print(traceback.format_exc())
     wrapper.has_run = False
     return wrapper
 
@@ -145,20 +145,20 @@ def index(path=''):
 @requires_auth
 @run_once_per_day
 def populate():
-    print "Begin MAC Address population ..."
+    print("Begin MAC Address population ...")
     try:
         with Timeout(300):
             oui.update()
-    except Exception, e:
-        print e
-        print traceback.format_exc()
+    except Exception as e:
+        print(e)
+        print(traceback.format_exc())
     # Response needed for local execution which runs shorter than 2 mins
     finally:
         data = {
             'message': 'Whoaa! MacReduce Data Populated/Refreshed'
         }
         message = json.dumps(data)
-        print message
+        print(message)
         resp = Response(message, status=200, mimetype='application/json')
         return resp
 
