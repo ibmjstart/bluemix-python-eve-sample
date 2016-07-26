@@ -30,7 +30,7 @@ OUI_REPLACE = ":"
 
 
 def update():
-    print "Deleting (reset) Mongo Collection named 'mac'"
+    print("Deleting (reset) Mongo Collection named 'mac'")
     delete("mac")
     with Timeout(5, False):
         oui = urllib2.urlopen(OUI_URL, timeout=240)
@@ -51,10 +51,10 @@ def update():
             }
             post_internal("mac", macEntry)
             if not VCAP_CONFIG:
-                print macHexVendor.group(1).replace(OUI_MATCH,
-                                                    OUI_REPLACE) + ", " + \
-                    macHexVendor.group(2)
-    print "Number of MAC Entries matched: " + str(count)
+                print(macHexVendor.group(1).replace(OUI_MATCH,
+                                                    OUI_REPLACE) + ", " +
+                      macHexVendor.group(2))
+    print("Number of MAC Entries matched: " + str(count))
     return ""
 
 
@@ -67,6 +67,6 @@ def _sendGetRequest(url, queryParameters, customHeaders):
                            headers=headers)
     prepared = req.prepare()
     s = requests.Session()
-    print "Retrieving data from url: " + url
+    print("Retrieving data from url: " + url)
     r = s.send(prepared)
     return r.status_code, r.text

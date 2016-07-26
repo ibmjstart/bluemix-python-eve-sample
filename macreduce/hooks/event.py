@@ -23,11 +23,8 @@ __status__ = "Prototype"
 def before_returning_irrational_items(request, lookup):
     try:
         desiredLang = request.accept_languages.best_match(LANGUAGES.keys())
-        print "The Accept-Language Header is: " + desiredLang
-        if desiredLang is not None:
-            lookup["locale"] = {"$eq": desiredLang}
-        else:
-            lookup["locale"] = {"$eq": "en"}
-    except Exception, e:
-        print e
+        print("The Accept-Language Header is: " + desiredLang)
+        lookup["locale"] = {"$eq": desiredLang or "en"}
+    except Exception as e:
+        print(e)
         traceback.print_exc()
