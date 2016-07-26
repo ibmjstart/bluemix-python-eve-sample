@@ -9,12 +9,16 @@ This project is a [Python-Eve Framework](http://python-eve.org/) application (Fl
 - [Live Demo](http://macreduce.mybluemix.net/api/v1/mac)
 - Cloud [~10 mins == A publicly visible deploy in the cloud.  Sweet!]
 
-  [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/ibmjstart/bluemix-python-eve-sample.git)
+  [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy/index.html?repository=https://github.com/ibmjstart/bluemix-python-eve-sample.git)
 
 - Local Dev
   1. Clone this repository to your local machine
   2. Install and start a local MongoDB listening on default settings
-  3. Run Application
+  3. Install dependencies to your local environment
+  
+     `$ pip install -r requirements.txt`
+
+  4. Run Application
   
      `$ python macreduce/run.py`
 
@@ -34,17 +38,36 @@ This project is a [Python-Eve Framework](http://python-eve.org/) application (Fl
   4. Fun Enhancement:  Try to extend the model schema to also include the address information for an organization.  Hint: You'll need to tweak the helper module which parses (and ignores the address info from) the IEEE raw data.
 
 ### Assumptions/Limitations/Constraints
-- Using Python 2.7.9 as declared in the runtime.txt file
+- Using Python 2.7.11 as declared in the runtime.txt file
+- **Cloning repository** step within the deploy to bluemix button may show as failing.  This is most likely due to an existing Free tier RedisCloud instance already in existence for your Bluemix organization.  A fallback deploy job is included within this repo to handle this condition.  You can either ignore the error and browse to the build pipeline manually within the jazz.net project or remove your existing RedisCloud service and try the button again.
 
 ### Dependencies
 #### Services
-- MongoDB provided by MongoLabs
-- Redis Cache provided by RedisCloud (Not needed for Local Dev/Deployment)
+- MongoDB provided by Bluemix Experimental Service
+  -  **WARNING**:  For production usage, you should strongly consider using alternate services such as MongoDB by Compose or MongoLabs
+- Redis provided by Bluemix Experimental Service
+  -  **WARNING**:  For production usage, you should strongly consider using alternate services such as Redis by Compose or Redis Cache provided by RedisCloud.  The Redis service is **NOT** needed for local Dev/Deployment.
 
 #### Key Python Modules and Frameworks
 - Eve (Rest API framework)
 - GEvent (WSGI Server wrapper around Flask to bolster performance)
 - Requests (Module for invoking HTTP Requests to 3rd party platforms and APIs)
+
+#### Custom DevOps Pipeline and Testing (NEW)
+![custom pipeline](/macreduce/static/img/custom_devops_pipeline.png)
+- Test Jobs for the pipeline are defined within the **[.bluemix/pipeline.yml](/.bluemix/pipeline.yml)** configuration file used by the deploy-to-bluemix button when setting up the devOps pipeline for the first time
+- Test Jobs are configured to kill/stop the pipeline if any failures are encountered
+- A SetupServices Deploy Job is included as a fallback for service creation if automatic creation via the deploy-to-bluemix button fails 
+- Two executable (+x) bash shell scripts located within the **tests** folder
+  - [pep8_style_tests.sh](/macreduce/tests/pep8_style_tests.sh) : Purpose is to setup and run Flake8 syntax testing
+  
+  ![pep8 pipeline test job](/macreduce/static/img/pep8_testjob_pipeline.png)
+
+  - [nose_unit_tests.sh](/macreduce/tests/nose_unit_tests.sh) : Purpose is to setup and run nosetests for all unit tests within the **tests** folder
+  
+  ![nosetests pipeline test job](/macreduce/static/img/nosetests_testjob_pipeline.png)
+
+- Providing them as source controlled files allows reuse within other projects
 
 #### Useful Binaries and Platforms
 - IBM Bluemix

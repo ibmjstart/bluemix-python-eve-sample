@@ -5,7 +5,6 @@ Contains the Unit Tests for exercising all provided
 API Endpoints for the Python Eve REST Server
 """
 
-# TODO: Illustrate HTTMock and httpretty examples
 import requests
 
 __author__ = "Sanjay Joshi"
@@ -19,11 +18,12 @@ __status__ = "Demo"
 
 
 ROOT_TEST_URL = 'http://localhost:5005'
+DOC_PATH = '/docs'
 
 
-def test_default_no_content_type_response():
-    """ Read Base URL without Content Type"""
-    url = ROOT_TEST_URL
+def test_base_eve_docs_no_content_type_response():
+    """ Read Base EVE DOCS URL without Content Type"""
+    url = ''.join([ROOT_TEST_URL, DOC_PATH])
     headers = {}
     r = requests.get(url, headers=headers)
     assert r.status_code == requests.codes.ok  # 200

@@ -1,0 +1,108 @@
+---
+stages:
+- name: RapidAssemble
+  inputs:
+  - type: git
+    branch: master
+  triggers:
+  - type: commit
+  jobs:
+  - name: WrapPresent
+    type: builder
+    artifact_dir: ''
+  - name: PEP8 Test
+    type: tester
+    fail_stage: true
+    script: source ./macreduce/tests/pep8_style_tests.sh
+    enable_tests: true
+    test_file_pattern: flake8.xml
+  - name: Nose Unit Tests
+    type: tester
+    fail_stage: true
+    script: source ./macreduce/tests/nose_unit_tests.sh
+    enable_tests: true
+    test_file_pattern: nosetests.xml
+- name: SameDayDelivery
+  inputs:
+  - type: job
+    stage: RapidAssemble
+    job: WrapPresent
+  jobs:
+  - name: SetupServices
+    type: deployer
+    target:
+      url: ${CF_TARGET_URL}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      application: ${CF_APP}
+    script: |-
+      #!/bin/bash
+      ##########
+      # Colors##
+      ##########
+      Green='\e[0;32m'
+      Red='\e[0;31m'
+      Yellow='\e[0;33m'
+      Cyan='\e[0;36m'
+      no_color='\e[0m' # No Color
+      beer='\xF0\x9f\x8d\xba'
+      delivery='\xF0\x9F\x9A\x9A'
+      beers='\xF0\x9F\x8D\xBB'
+      eyes='\xF0\x9F\x91\x80'
+      cloud='\xE2\x98\x81'
+      litter='\xF0\x9F\x9A\xAE'
+      fail='\xE2\x9B\x94'
+      harpoons='\xE2\x87\x8C'
+      tools='\xE2\x9A\x92'
+      present='\xF0\x9F\x8E\x81'
+      #############
+      if [ -n $(echo ${CF_TARGET_URL} | grep ng.bluemix.net) ]; then
+        echo -e "${tools}${Cyan}  Detected Region: US South${no_color}"
+        export CF_REGION=US
+      elif [ -n $(echo ${CF_TARGET_URL} | grep eu-gb.bluemix.net) ]; then
+        echo -e "${tools}${Cyan}  Detected Region: United Kingdom${no_color}"
+        export CF_REGION=UK
+      elif [ -n $(echo ${CF_TARGET_URL} | grep au-syd.bluemix.net) ]; then
+        echo -e "${tools}${Cyan}  Detected Region: Sydney${no_color}"
+        export CF_REGION=AU
+      fi
+      if [ ${CF_REGION} == "US" ] || [ ${CF_REGION} == "UK" ]; then
+          echo -e "${tools}${Yellow}    Pre-creating Experimental Redis Service named [${Cyan}everedis${Yellow}]${no_color}"
+          echo -e "${tools}${Red}    For production usage, a Redis by Compose service instance is strongly recommended${no_color}"
+          t=0
+          until [ $t -ge 5 ]
+          do
+            cf create-service redis 100 everedis > /dev/null 2>&1 && break
+            t=$[$t+1]
+            sleep 15
+          done
+      else
+        echo -e "${tools}${Yellow}    RedisCloud service not available in this region${no_color}"
+      fi
+      if [ ${CF_REGION} == "US" ] || [ ${CF_REGION} == "UK" ]; then
+          echo -e "${tools}${Yellow}    Pre-creating Experimental MongoDB Service named [${Cyan}evemongo${Yellow}]${no_color}"
+          echo -e "${tools}${Red}    For production usage, a MongoDB by Compose service instance is strongly recommended${no_color}"
+          t=0
+          until [ $t -ge 5 ]
+          do
+            cf create-service mongodb 100 evemongo > /dev/null 2>&1 && break
+            t=$[$t+1]
+            sleep 15
+          done
+      else
+        echo -e "${tools}${Yellow}    Experimental MongoDB service not available in this region${no_color}"
+      fi
+  - name: DeliverPresent
+    type: deployer
+    target:
+      url: ${CF_TARGET_URL}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      application: ${CF_APP}
+    script: |-
+      #!/bin/bash
+      cf push "${CF_APP}"
+
+      # View logs
+      #cf logs "${CF_APP}" --recent
+

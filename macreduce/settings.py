@@ -51,7 +51,8 @@ if VCAP_CONFIG:
         # Looking for an instance of a Mongo Bluemix Service
         if key.startswith('mongo'):
             mongo_creds = decoded_config[key][0]['credentials']
-            seq = (r'^mongodb\:\/\/(?P<username>[\W\w]+):(?P<password>[\W\w]+)@'
+            seq = (r'^mongodb\:\/\/(?P<username>[\W\w]+):(?P<password>[\W\w]+)'
+                   '@'
                    '(?P<host>[\.\w]+):(?P<port>\d+)/(?P<database>[\W\w]+).*?$')
             regex = re.compile(seq)
             match = regex.search(mongo_creds['url'])
