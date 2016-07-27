@@ -84,7 +84,7 @@ echo -e "${tools}  ${Yellow}Installing Nose Test Framework${no_color}"
 # Run Nose Testing ... booyah!
 echo -e "${eyes} ${Yellow}Executing Nose Tests${no_color}"
 echo -e ""
-~/.local/bin/nosetests --stop --cover-html --with-xunit .
+~/.local/bin/nosetests --verbosity=2 --stop --cover-html --with-xunit .
 
 echo -e ""
 echo -e "${litter}  ${Red}Tearing Down Test Infrastructure${no_color}"
