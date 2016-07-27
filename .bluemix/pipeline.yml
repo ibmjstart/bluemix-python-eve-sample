@@ -56,13 +56,13 @@ stages:
       tools='\xE2\x9A\x92'
       present='\xF0\x9F\x8E\x81'
       #############
-      if [ -n $(echo ${CF_TARGET_URL} | grep ng.bluemix.net) ]; then
+      if [ -n "$(echo ${CF_TARGET_URL} | grep ng.bluemix.net)" ]; then
         echo -e "${tools}${Cyan}  Detected Region: US South${no_color}"
         export CF_REGION=US
-      elif [ -n $(echo ${CF_TARGET_URL} | grep eu-gb.bluemix.net) ]; then
+      elif [ -n "$(echo ${CF_TARGET_URL} | grep eu-gb.bluemix.net)" ]; then
         echo -e "${tools}${Cyan}  Detected Region: United Kingdom${no_color}"
         export CF_REGION=UK
-      elif [ -n $(echo ${CF_TARGET_URL} | grep au-syd.bluemix.net) ]; then
+      elif [ -n "$(echo ${CF_TARGET_URL} | grep au-syd.bluemix.net)" ]; then
         echo -e "${tools}${Cyan}  Detected Region: Sydney${no_color}"
         export CF_REGION=AU
       fi
