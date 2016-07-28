@@ -37,7 +37,7 @@ This project is a [Python-Eve Framework](http://python-eve.org/) application (Fl
     ```$ curl -g -X GET -H "Accept: application/json; charset=utf-8" -H "Cache-Control: no-cache" 'http://{your_host}.mybluemix.net/api/v1/mac?where={"organization":{"$regex":"^ibm.*?$","$options":"i"}}'```
   4. Fun Enhancement:  Try to extend the model schema to also include the address information for an organization.  Hint: You'll need to tweak the helper module which parses (and ignores the address info from) the IEEE raw data.
 
-- ![Event Hooks](http://python-eve.org/features.html#event-hooks) (NEW)
+- [Event Hooks](http://python-eve.org/features.html#event-hooks) (NEW)
   1. Python Eve supports pre-request, post-request and database event hooks. When a particular request is received, an event is raised. You can subscribe to these events with multiple callback functions.  Database event hooks work like request event hooks. These events are fired before and after a database action.
   2. This sample implements an example of a pre and post request event hook.
      - pre-request: Located within [event.py](/macreduce/hooks/event.py) is a method entitled **before_returning_items**.  It prints out the detected Accept-Language request header.
@@ -56,7 +56,7 @@ This project is a [Python-Eve Framework](http://python-eve.org/) application (Fl
 - Redis provided by Bluemix Experimental Service or RedisCloud
   -  **WARNING**:  For production usage, you should strongly consider using alternate services such as Redis by Compose or Redis Cache provided by RedisCloud.  The Redis service is **NOT** needed for local Dev/Deployment.
 
-#### ![Key Python Modules and Frameworks](/requirements.txt)
+#### [Key Python Modules and Frameworks](/requirements.txt)
 - Eve (Rest API framework) - latest **develop** Branch
 - GEvent (WSGI Server wrapper around Flask to bolster performance)
 - Requests (Module for invoking HTTP Requests to 3rd party platforms and APIs)
