@@ -16,6 +16,8 @@ from flask.ext.bootstrap import Bootstrap
 from eve import Eve
 from eve_docs import eve_docs
 from routes import home
+from hooks.event import (before_returning_items,
+                         after_returning_items)
 from gevent import wsgi, monkey, socket
 import os
 from platform import python_version
@@ -63,6 +65,13 @@ app.add_url_rule('/favicon', 'favicon',
                  view_func=home.favicon, methods=['GET'])
 app.add_url_rule('/populate', 'populate',
                  view_func=home.populate, methods=['GET'])
+
+# Setup examples of event hooks
+app.on_pre_GET_mac += \
+    before_returning_items
+
+app.on_post_GET_mac += \
+    after_returning_items
 
 # Bootstrap and start Flask app within the WSGI GEvent Process
 if __name__ == '__main__':

@@ -107,6 +107,15 @@ MONGO_QUERY_BLACKLIST = ['$where']
 CACHE_CONTROL = 'max-age=20'
 CACHE_EXPIRES = 20
 
+# Accept-Language request headers
+LANGUAGES = {
+    'en': 'English',
+    'es': 'Espanol',
+    'fr': 'French',
+    'pt': 'Portuguese',
+    'ar': 'Arabic'
+}
+
 # Our API will expose the following resources (MongoDB collections):
 # 'mac', ...
 # In order to allow for proper data validation, we define behaviour

@@ -11,7 +11,7 @@ import traceback
 from settings import (LANGUAGES)
 
 __author__ = "Sanjay Joshi"
-__copyright__ = "IBM Copyright 2015"
+__copyright__ = "IBM Copyright 2016"
 __credits__ = ["Sanjay Joshi"]
 __license__ = "Apache 2.0"
 __version__ = "1.0"
@@ -20,11 +20,22 @@ __email__ = "joshisa@us.ibm.com"
 __status__ = "Prototype"
 
 
-def before_returning_irrational_items(request, lookup):
+# Pre-Request Event Hook example
+def before_returning_items(request, lookup):
     try:
         desiredLang = request.accept_languages.best_match(LANGUAGES.keys())
-        print("The Accept-Language Header is: " + desiredLang)
+        print("The best matched Accept-Language Header is: " + desiredLang +
+              " (" + LANGUAGES.get(desiredLang) + ")")
         lookup["locale"] = {"$eq": desiredLang or "en"}
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
+
+
+# Post-Request Event Hook example
+def after_returning_items(resource, request):
+    try:
+        print('A GET on the "%s" endpoint was just performed!' % resource)
     except Exception as e:
         print(e)
         traceback.print_exc()
