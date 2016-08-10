@@ -11,10 +11,12 @@ session management where desired.
 from settings import (REDIS_INSTANCE,
                       APP_HOST,
                       APP_PORT,
-                      VCAP_CONFIG)
+                      VCAP_CONFIG,
+                      SERVER_NAME)
 from flask.ext.bootstrap import Bootstrap
 from eve import Eve
 from eve_docs import eve_docs
+from eve_swagger import swagger
 from routes import home
 from hooks.event import (before_returning_items,
                          after_returning_items)
@@ -45,7 +47,6 @@ static_folder = os.path.join(PWD, "macreduce/static")
 if VCAP_CONFIG:
     print('Welcome to Bluemix')
     print('Running on Python version: ' + python_version())
-
     app = Eve(static_folder=static_folder,
               redis=REDIS_INSTANCE)
     REDIS_INSTANCE.flushdb()
@@ -73,17 +74,41 @@ app.on_pre_GET_mac += \
 app.on_post_GET_mac += \
     after_returning_items
 
+app.config['SWAGGER_INFO'] = {
+    'title': 'Macreduce API',
+    'version': '1.0',
+    'description': 'Python-Eve Framework application backend deployed on IBM '
+                   'Bluemix that provides a practical illustration of setting '
+                   'up a python REST API to support mobile workloads and '
+                   'integration with 3rd party API platforms.',
+    'termsOfService': 'Have fun and learn!',
+    'contact': {
+        'name': 'joshisa',
+        'url': 'http://ibm.biz/sanjay_joshi'
+    },
+    'license': {
+        'name': 'Apache 2.0',
+        'url': 'https://github.com/ibmjstart/bluemix-python-eve-sample/'
+               'blob/master/LICENSE',
+    }
+}
+
+# optional Eve-Swagger option only applicable with domains
+app.config['SWAGGER_HOST'] = SERVER_NAME
+
 # Bootstrap and start Flask app within the WSGI GEvent Process
 if __name__ == '__main__':
     # Required to enable the Eve-docs extension
     Bootstrap(app)
-    # Let's cleanup our webhooks
-    # poynthook.getWebhooks()
+
+    # Example invocation for running the Flask Server by itself
+    # app.run(host=APP_HOST, port=int(APP_PORT))
 
     # Register the Flask Eve-docs blueprint
     app.register_blueprint(eve_docs, url_prefix='/docs')
-    # Example invocation for running the Flask Server by itself
-    # app.run(host=APP_HOST, port=int(APP_PORT))
+
+    # Register the Swagger Extension for Eve
+    app.register_blueprint(swagger)
 
     # Starting the GEvent WSGI Server to host the Flask App
     # GEvent should provide superior response times to the
