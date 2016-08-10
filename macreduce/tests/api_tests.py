@@ -3,7 +3,7 @@
 
 Contains the Unit Tests for exercising all provided
 API Endpoints for the Python Eve REST Server.
-HTTP Header Reference: 
+HTTP Header Reference:
 https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
 """
 
