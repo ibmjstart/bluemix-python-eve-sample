@@ -49,15 +49,31 @@ echo -e "${eyes}    Coding Style: ${Cyan}PEP8${no_color}"
 echo ""
 
 # Execute Flake8
-~/.local/bin/flake8 --output-file flake8.txt .
-if [ $? -eq 0 ] ; then
+flakeError=$(~/.local/bin/flake8 --count --output-file=flake8.txt --exit-zero .)
+
+# Assess Flake8 Results
+if [ $flakeError -eq 0 ] ; then
     echo -e "${eyes} TEST RESULT (Code Hygiene): ${Green}Pass${no_color}" 
     echo -e "${beers}  ${Yellow}Sweeeeet.  Zero (0) Errors. Code looks clean to Flake8 validation${no_color}"
     echo -e "${beers}  ${Yellow}finis coronat opus - Bluemix Rox!${no_color}"
     echo ""
+    echo -e "${tools}  ${Yellow}Converting Flake8 output to XUnit XML format${no_color}"
+    echo "<?xml version='1.0' encoding='utf-8'?>" > flake8.xml
+    echo "<testsuite errors='0' failures='0' name='flake8' tests='1' time='1'>" >> flake8.xml
+    echo "<testcase result='pass' name='PyFlakes_pycodestyle_McCabe_script_wrapper'/>" >> flake8.xml
+    echo "</testsuite>" >> flake8.xml
+    echo -e "\n"
+else
+    echo -e "${eyes} TEST RESULT (Code Hygiene): ${Red}Fail${no_color}" 
+    echo -e "${eyes}  ${Yellow}Uh oh!  (${no_color}${flakeError}${Yellow}) error(s) found. Code needs remediation to pass Flake8 validation.  See below.${no_color}"
+    echo ""
+    echo -e "======= ${Cyan}Error(s)${no_color} ======"
+    cat flake8.txt
+    echo ""
+    echo -e "${tools}  ${Yellow}Converting Flake8 output to XUnit XML format${no_color}"
+    ~/.local/bin/flake8_junit flake8.txt flake8.xml
+    echo -e "\n"
+    # Indicate to pipeline job that we failed
+    cat flake8.xml
+    exit 1
 fi
-
-echo -e "${tools}  ${Yellow}Converting Flake8 output to XUnit XML format${no_color}"
-~/.local/bin/flake8_junit flake8.txt flake8.xml
-echo -e "\n"
-

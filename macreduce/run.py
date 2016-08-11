@@ -11,8 +11,7 @@ session management where desired.
 from settings import (REDIS_INSTANCE,
                       APP_HOST,
                       APP_PORT,
-                      VCAP_CONFIG,
-                      SERVER_NAME)
+                      VCAP_CONFIG)
 from flask.ext.bootstrap import Bootstrap
 from eve import Eve
 from eve_docs import eve_docs
@@ -92,9 +91,6 @@ app.config['SWAGGER_INFO'] = {
                'blob/master/LICENSE',
     }
 }
-
-# optional Eve-Swagger option only applicable with domains
-app.config['SWAGGER_HOST'] = SERVER_NAME
 
 # Bootstrap and start Flask app within the WSGI GEvent Process
 if __name__ == '__main__':
