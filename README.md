@@ -46,9 +46,24 @@ This project is a [Python-Eve Framework](http://python-eve.org/) application (Fl
 
 ### Assumptions/Limitations/Constraints
 - Using Python 2.7.11 as declared in the runtime.txt file
+- Cross-origin resource sharing (CORS) is enabled within [settings.py](/macreduce/settings.py#L120-L122)
 - Sample is compatible for deployment on both the US South and United Kingdom Bluemix Regions.  Sydney is not supported at this time.
 - **Cloning repository** step within the deploy to bluemix button may show as failing.  This is most likely due to an existing Free tier RedisCloud instance already in existence for your Bluemix organization.  A fallback deploy job is included within this repo to handle this condition.  You can either ignore the error and browse to the build pipeline manually within the jazz.net project or remove your existing RedisCloud service and try the button again.
-
+- When attempting to populate your deployed application with MAC Address Data by invoking the authenticated endpoint (/populate), you may encounter a **500 Error: Failed to establish a backside connection** response.  This error is benign and most likely caused by a timeout upstream.  You can continue to monitor the console output (local deploy) or use **cf logs {bluemix_app_name}** to wait/confirm completion of the population step.  A successful STDOUT sequence will look similar to:
+```
+  Starting app instance (index 0) with guid d5xxxx-4e7f-xxxx-9206-dcxxxxxxxxx3
+  2016-08-12T02:09:06.73-0400 [App/0]      OUT Welcome to Bluemix
+  2016-08-12T02:09:06.73-0400 [App/0]      OUT Running on Python version: 2.7.11
+  2016-08-12T02:10:11.46-0400 [App/0]      OUT Evaluating if Now is >= Criteria ...
+  2016-08-12T02:10:11.46-0400 [App/0]      OUT Refresh criteria has been met
+  2016-08-12T02:10:11.46-0400 [App/0]      OUT Begin MAC Address population ...
+  2016-08-12T02:10:11.46-0400 [App/0]      OUT Deleting (reset) Mongo Collection named 'mac'
+  2016-08-12T02:10:11.46-0400 [App/0]      OUT The best matched Accept-Language Header is: en (English)
+  2016-08-12T02:14:23.27-0400 [RTR/1]      OUT macreduce.mybluemix.net - [12/08/2016:06:10:11.453 +0000] "GET /populate HTTP/1.1" 200 0 56 "-" "curl/7.43.0" 169.54.202.28:15063 x_forwarded_for:"23.114.41.234" x_forwarded_proto:"http" vcap_request_id:886b3293-5432-4a10-75fd-01b267cdde51 response_time:251.819555383 app_id:d5xxxx-4e7f-xxxx-9206-dcxxxxxxxxx3 x_global_transaction_id:"587954813"
+  2016-08-12T02:14:23.27-0400 [App/0]      OUT Number of MAC Entries matched: 22213
+  2016-08-12T02:14:23.27-0400 [App/0]      OUT {"message": "Whoaa! MacReduce Data Populated/Refreshed"}
+  2016-08-12T02:14:23.28-0400 [App/0]      ERR 169.55.202.148 - - [2016-08-12 06:14:23] "GET /populate HTTP/1.1" 200 164 251.815483
+```
 ### Dependencies
 #### Services
 - MongoDB provided by Bluemix Experimental Service
@@ -56,10 +71,16 @@ This project is a [Python-Eve Framework](http://python-eve.org/) application (Fl
 - Redis provided by Bluemix Experimental Service or RedisCloud
   -  **WARNING**:  For production usage, you should strongly consider using alternate services such as Redis by Compose or Redis Cache provided by RedisCloud.  The Redis service is **NOT** needed for local Dev/Deployment.
 
-#### [Key Python Modules and Frameworks](/requirements.txt)
+#### [Key Python Modules/Frameworks and EVE extensions](/requirements.txt)
 - Eve (Rest API framework) - latest **develop** Branch
 - GEvent (WSGI Server wrapper around Flask to bolster performance)
 - Requests (Module for invoking HTTP Requests to 3rd party platforms and APIs)
+- [Python Eve-Docs](https://github.com/charlesflynn/eve-docs) - A blueprint that generates documentation for Eve APIs in HTML and JSON formats. Eve-docs creates the documentation from your existing Eve configuration file, with no additional configuration required. After deployment, it can be accessed at the api endpoint (/docs) [example](http://macreduce.mybluemix.net/docs)
+- [Python Eve-Swagger](https://github.com/nicolaiarocci/eve-swagger) (NEW) - [Swagger](http://swagger.io/) extension for Eve powered RESTful APIs.  After deployment, it can be accessed at the api endpoint (/api-docs) [example](http://macreduce.mybluemix.net/api-docs)
+  
+  You can use the Swagger 2.0 compliant JSON output from this endpoint in conjunction with other swagger tooling to help document and manage access to your REST APIs.  This also typically requires Cross-origin resource sharing (CORS) to be enabled. See [Assumptions](#assumptionslimitationsconstraints).  Using the [editor.swagger.io](http://editor.swagger.io/#/) web application paired with the JSON output ...
+
+  ![editor.swagger.io screenshot](/macreduce/static/img/editor_swagger_io.png)
 
 #### Custom DevOps Pipeline and Testing (NEW)
 ![custom pipeline](/macreduce/static/img/custom_devops_pipeline.png)
