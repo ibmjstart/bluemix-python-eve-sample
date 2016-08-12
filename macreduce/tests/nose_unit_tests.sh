@@ -70,7 +70,7 @@ echo -e "${delivery}   ${Yellow}Creating ${Cyan}user${Yellow} on database ${Cyan
 echo -e "${harpoons}  ${Yellow}Fetching EZ_SETUP and PIP setup files${no_color}"
 wget https://bootstrap.pypa.io/ez_setup.py -nv -O - | python - --user > /dev/null 2>&1
 wget https://bootstrap.pypa.io/get-pip.py -nv -O - | python - --user > /dev/null 2>&1
-echo -e "${tools}  ${Yellow}Installing Redis, Flask, Eve, Eve-docs and gevent ...${no_color}"
+echo -e "${tools}  ${Yellow}Installing Redis, Flask, Eve, Eve-docs, Eve-Swagger and gevent ...${no_color}"
 ~/.local/bin/pip install --user -r ./requirements.txt > /dev/null 2>&1
 
 echo -e "${eyes} ${Yellow}Running Python-Eve REST API Test Server${no_color}"

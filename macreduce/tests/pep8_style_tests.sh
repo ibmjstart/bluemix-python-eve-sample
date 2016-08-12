@@ -74,6 +74,5 @@ else
     ~/.local/bin/flake8_junit flake8.txt flake8.xml
     echo -e "\n"
     # Indicate to pipeline job that we failed
-    cat flake8.xml
     exit 1
 fi

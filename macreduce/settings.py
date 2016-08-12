@@ -36,7 +36,6 @@ VCAP_CONFIG = os.getenv('VCAP_SERVICES')
 VCAP_APPLICATION = os.getenv('VCAP_APPLICATION')
 REDIS_INSTANCE = None
 APP_URI = 'http://0.0.0.0:5005'
-SERVER_NAME = None
 
 # Detect if we are deployed within Bluemix or not and act accordingly
 if VCAP_CONFIG:
@@ -109,6 +108,7 @@ CACHE_CONTROL = 'max-age=20'
 CACHE_EXPIRES = 20
 
 # Accept-Language request headers
+LANGUAGE_DEFAULT = 'en'
 LANGUAGES = {
     'en': 'English',
     'es': 'Espanol',

@@ -8,7 +8,8 @@ flow of triggers and events to resources
 """
 
 import traceback
-from settings import (LANGUAGES)
+from settings import (LANGUAGES,
+                      LANGUAGE_DEFAULT)
 
 __author__ = "Sanjay Joshi"
 __copyright__ = "IBM Copyright 2016"
@@ -23,10 +24,10 @@ __status__ = "Prototype"
 # Pre-Request Event Hook example
 def before_returning_items(request, lookup):
     try:
-        desiredLang = request.accept_languages.best_match(LANGUAGES.keys())
+        desiredLang = request.accept_languages.best_match(LANGUAGES.keys(),
+                                                          LANGUAGE_DEFAULT)
         print("The best matched Accept-Language Header is: " + desiredLang +
               " (" + LANGUAGES.get(desiredLang) + ")")
-        lookup["locale"] = {"$eq": desiredLang or "en"}
     except Exception as e:
         print(e)
         traceback.print_exc()
