@@ -117,6 +117,10 @@ LANGUAGES = {
     'ar': 'Arabic'
 }
 
+# We enable Cross Origin Resource Sharing (CORS) to facilitate swagger.io
+X_DOMAINS = '*'
+X_HEADERS = ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
+
 # Our API will expose the following resources (MongoDB collections):
 # 'mac', ...
 # In order to allow for proper data validation, we define behaviour
