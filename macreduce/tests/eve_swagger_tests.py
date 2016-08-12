@@ -21,7 +21,7 @@ ROOT_TEST_URL = 'http://localhost:5005'
 DOC_PATH = '/api-docs'
 
 
-def test_base_eve_docs_no_content_type_response():
+def test_base_eve_swagger_no_content_type_response():
     """ Read Base EVE SWAGGER URL without Content Type"""
     url = ''.join([ROOT_TEST_URL, DOC_PATH])
     headers = {}
