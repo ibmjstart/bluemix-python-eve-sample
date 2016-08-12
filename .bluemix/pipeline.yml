@@ -101,7 +101,7 @@ stages:
       application: ${CF_APP}
     script: |-
       #!/bin/bash
-      cf push "${CF_APP}"
+      cf push "${CF_APP}" -b https://github.com/cloudfoundry/python-buildpack
 
       # View logs
       #cf logs "${CF_APP}" --recent
