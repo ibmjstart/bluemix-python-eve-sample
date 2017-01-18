@@ -30,7 +30,7 @@ PWD = os.getenv("PWD")
 # set root folder path
 ROOT_PATH = os.path.join(PWD, "macreduce")
 # set default host and ports (change 5000 to avoid airplay collision)
-APP_HOST = os.getenv('VCAP_APP_HOST', '0.0.0.0')
+APP_HOST = os.getenv('0.0.0.0')
 APP_PORT = os.getenv('VCAP_APP_PORT', '5005')
 VCAP_CONFIG = os.getenv('VCAP_SERVICES')
 VCAP_APPLICATION = os.getenv('VCAP_APPLICATION')
