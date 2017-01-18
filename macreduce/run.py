@@ -9,7 +9,7 @@ session management where desired.
 """
 
 from settings import (REDIS_INSTANCE,
-                      '0.0.0.0',
+                      APP_HOST,
                       APP_PORT,
                       VCAP_CONFIG)
 from flask.ext.bootstrap import Bootstrap
@@ -109,5 +109,5 @@ if __name__ == '__main__':
     # Starting the GEvent WSGI Server to host the Flask App
     # GEvent should provide superior response times to the
     # dev Flask server
-    ws = wsgi.WSGIServer(('0.0.0.0', int(APP_PORT)), app)
+    ws = wsgi.WSGIServer((APP_HOST, int(APP_PORT)), app)
     ws.serve_forever()
