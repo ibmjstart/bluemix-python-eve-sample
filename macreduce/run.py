@@ -9,7 +9,7 @@ session management where desired.
 """
 
 from settings import (REDIS_INSTANCE,
-                      APP_HOST,
+                      '0.0.0.0',
                       APP_PORT,
                       VCAP_CONFIG)
 from flask.ext.bootstrap import Bootstrap
