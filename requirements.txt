@@ -9,7 +9,7 @@ cryptography==1.4
 enum34==1.1.6
 pyasn1==0.1.9
 pycparser==2.14
-requests==2.10.0
+requests>=2.20.0
 rsa==3.4.2
 six==1.10.0
 wsgiref==0.1.2
